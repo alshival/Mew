@@ -133,6 +133,9 @@ mew-setup --help
 
 This will display detailed usage instructions and a list of commands.
 
+# TO-DO
+Implement RAG to provide context across different documenation. 
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit issues or pull requests. Please make sure to follow the contribution guidelines.

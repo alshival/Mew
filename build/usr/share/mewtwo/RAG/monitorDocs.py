@@ -36,17 +36,18 @@ def update():
         records = []
         
         for entry in os.scandir(directory):
-            record = {
-                "filepath": str(Path(entry.path).resolve()),
-                "filename": entry.name,
-                "directory": str(Path(directory).resolve()),
-                "created": format_timestamp(entry.stat().st_ctime),
-                "modified": format_timestamp(entry.stat().st_mtime)
-            }
-            records.append(record)
-            
             if entry.is_dir(follow_symlinks=False):
+                # Recursively build the tree for subdirectories
                 records.extend(build_tree(entry.path))
+            else:
+                record = {
+                    "filepath": str(Path(entry.path).resolve()),
+                    "filename": entry.name,
+                    "directory": str(Path(directory).resolve()),
+                    "created": format_timestamp(entry.stat().st_ctime),
+                    "modified": format_timestamp(entry.stat().st_mtime)
+                }
+                records.append(record)
         
         return records
 
@@ -79,11 +80,11 @@ def update():
             
             # Handle modified or new files
             for filepath in modified_or_new_files:
-                if os.path.exists(filepath):
+                if os.path.exists(filepath) and os.path.isfile(filepath):
                     print(f"Updating document: {filepath}")
                     rag.update_document(filepath)
                 else:
-                    print(f"File not found, skipping update: {filepath}")
+                    print(f"File not found or is a directory, skipping update: {filepath}")
             
             # Handle deleted files
             for filepath in deleted_files:
@@ -100,11 +101,11 @@ def update():
         # If there's no previous state, add all files and save the current one
         print("Adding all documents as this is the initial state.")
         for filepath in current_state['filepath']:
-            if os.path.exists(filepath):
+            if os.path.exists(filepath) and os.path.isfile(filepath):
                 print(f"Adding document: {filepath}")
                 rag.add_document(filepath)
             else:
-                print(f"File not found, skipping add: {filepath}")
+                print(f"File not found or is a directory, skipping add: {filepath}")
         
         # Save the initial state
         with open(state_path, 'wb') as f:

@@ -1,0 +1,9 @@
+Package: mewtwo
+Version: 1.0.7
+Section: utils
+Priority: optional
+Architecture: all
+Depends: bash, python3
+Maintainer: Samuel Cavazos <samuel@alshival.com>
+Description: Mew AI Assistant
+ Mewtwo is an AI assistant for accessing documentation within folders to answer questions about server components.

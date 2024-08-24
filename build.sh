@@ -12,6 +12,10 @@ PACKAGE_FILENAME="${PACKAGE_NAME}-${VERSION}-${ARCHITECTURE}.deb"
 # Remove any existing .deb files
 rm -f ./*.deb
 
+# Copy the README.md over as sample documentation
+rm build/usr/share/mewtwo/Documentation/README.md
+cp README.md build/usr/share/mewtwo/Documentation
+
 # Remove dos text. (For when developing on WSL)
 sudo dos2unix build/usr/share/mewtwo/mewtwo.py
 sudo dos2unix build/usr/share/mewtwo/mewtwo_setup.py

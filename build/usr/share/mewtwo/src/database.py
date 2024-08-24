@@ -247,7 +247,7 @@ def get_config():
         }
 
     # If neither database has the API key, raise an error and exit
-    print("API key not found. Please run 'fefe-setup' to configure.")
+    print("API key not found. Please run 'mewtwo-setup' to configure.")
     sys.exit(1)
 
 def get_text_color():

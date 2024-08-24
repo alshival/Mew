@@ -162,7 +162,7 @@ mewtwo-setup --help
 This will display detailed usage instructions and a list of commands.
 
 # TO-DO
-Implement RAG to provide context across different documenation. 
+Add support for multiple documentation folders.
 
 ## Contributing
 

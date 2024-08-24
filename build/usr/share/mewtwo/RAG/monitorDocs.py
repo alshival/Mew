@@ -9,12 +9,15 @@ import sys
 
 def update():
     state_path = '/usr/share/mewtwo/RAG/monitor.pkl'
-    monitor_path = '/usr/share/mewtwo/Documentation/'
 
     try:
-        config =database.get_config()
+        config = database.get_config()
     except:
         sys.exit(1)
+        
+    monitor_path = database.get_documentation_path()
+    if monitor_path is None:
+        monitor_path = '/usr/share/mewtwo/Documentation/'
 
     # Load previous state if it exists
     if os.path.exists(state_path):

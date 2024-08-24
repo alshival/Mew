@@ -1,5 +1,5 @@
 # Uninstall the old package if it exists
-sudo dpkg -r mew
+sudo dpkg -r mewtwo
 
 # Extract package information from the control file
 PACKAGE_NAME=$(grep '^Package:' build/DEBIAN/control | awk '{print $2}' | tr -d '\r')
@@ -13,35 +13,37 @@ PACKAGE_FILENAME="${PACKAGE_NAME}-${VERSION}-${ARCHITECTURE}.deb"
 rm -f ./*.deb
 
 # Remove dos text. (For when developing on WSL)
-sudo dos2unix build/usr/share/mew/mew.py
-sudo dos2unix build/usr/share/mew/mew_setup.py
+sudo dos2unix build/usr/share/mewtwo/mewtwo.py
+sudo dos2unix build/usr/share/mewtwo/mewtwo_setup.py
+sudo dos2unix build/usr/share/mewtwo/RAG/rag.py
+sudo dos2unix build/usr/share/mewtwo/RAG/monitorDocs.py
 
 # Remove any existing virtual environments
-rm -rf build/usr/share/mew/mew-env
+rm -rf build/usr/share/mewtwo/mewtwo-env
 
 # Create a fresh virtual environment
-mkdir -p build/usr/share/mew/mew-env
-python3 -m venv build/usr/share/mew/mew-env 
+mkdir -p build/usr/share/mewtwo/mewtwo-env
+python3 -m venv build/usr/share/mewtwo/mewtwo-env 
 
 # Install python dependencies
-build/usr/share/mew/mew-env/bin/pip3 install -r build/usr/share/mew/requirements.txt
+build/usr/share/mewtwo/mewtwo-env/bin/pip3 install -r build/usr/share/mewtwo/requirements.txt
 
 # (Re)create symbolic links
-rm build/usr/bin/mew
-ln -s /usr/share/mew/mew.py build/usr/bin/mew
-rm build/usr/bin/mew-setup
-ln -s /usr/share/mew/mew_setup.py build/usr/bin/mew-setup
+rm build/usr/bin/mewtwo
+ln -s /usr/share/mewtwo/mewtwo.py build/usr/bin/mewtwo
+rm build/usr/bin/mewtwo-setup
+ln -s /usr/share/mewtwo/mewtwo_setup.py build/usr/bin/mewtwo-setup
 
 # Build the .deb package from the `build` directory
 dpkg-deb --build build ./${PACKAGE_FILENAME}
 
 # Clean up old databases if they exist
-if [ -f ~/.mew.db ]; then
-    sudo rm ~/.mew.db
+if [ -f ~/.mewtwo.db ]; then
+    sudo rm ~/.mewtwo.db
 fi
 
-if [ -f /usr/share/mew/mew.db ]; then
-    sudo rm /usr/share/mew/mew.db
+if [ -f /usr/share/mewtwo/mewtwo.db ]; then
+    sudo rm /usr/share/mewtwo/mewtwo.db
 fi
 
 # Install the new package

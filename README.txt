@@ -27,12 +27,10 @@ Mewtwo is an AI assistant tailored for server administrators. It reads and inter
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
     <td style="width: 50%; text-align: center;">
-      <figcaption><b>Fefe can interact with files on your Ubuntu System</b></figcaption>
-      <img src="https://github.com/alshival/fefe-terminal/blob/main/media/Screenshot%20from%202024-08-16%2012-32-00.png" style="width: 100%;">
+      <img src="https://github.com/alshival/Mewtwo/blob/main/media/demo1.png" style="width: 100%;">
     </td>
     <td style="width: 50%; text-align: center;">
-      <figcaption><b>Fefe can generate images too!</b></figcaption>
-      <img src="https://github.com/alshival/fefe-terminal/blob/main/media/Screenshot%20from%202024-08-16%2012-33-37.png" style="width: 100%;">
+      <img src="https://github.com/alshival/Mewtwo/blob/main/media/demo2.png" style="width: 100%;">
     </td>
   </tr>
 </table>

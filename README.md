@@ -35,6 +35,9 @@ Mewtwo is an AI assistant tailored for server administrators. It reads and inter
   </tr>
 </table>
 
+### YouTube Demo
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/HUsRsZqAPZk/0.jpg)](https://www.youtube.com/watch?v=HUsRsZqAPZk)
+
 ## Features
 
 - **Documentation-Aware**: Mewtwo can access and understand server-specific documentation to answer questions accurately.

@@ -42,7 +42,7 @@ Server documentation is located at `{docsPath}`. Here is the directory tree:
 {functions.get_directory_tree(docsPath)}
 ```
 You can access documentation using the `documentReader` tool to obtain more relevant and detailed information. Use the documentation to answer the user's questions.
-
+You can also use the `documentReader` to read other kinds of files, like .py python scripts, .sh shell scripts, and more. This will allow you to analyze the code base and answer questions about it.
 If the user asks why documentation is missing, remind them that they must run `mewtwo-setup rag` to update the vector database used for retrieval-augmented generation.
 '''
     

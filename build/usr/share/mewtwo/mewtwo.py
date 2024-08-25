@@ -80,7 +80,6 @@ If the user asks why documentation is missing, remind them that they must run `m
     database.update_chat_history(response,chat_id)
 
     if not tool_calls:
-
         print(functions.format_response(response.content))
     else:
         tools.handle_tool_calls(chat_id,tool_calls)

@@ -9,6 +9,9 @@ ARCHITECTURE=$(grep '^Architecture:' build/DEBIAN/control | awk '{print $2}' | t
 # Construct the package filename
 PACKAGE_FILENAME="${PACKAGE_NAME}-${VERSION}-${ARCHITECTURE}.deb"
 
+# Generate README.md from README.txt
+sed "s/<VERSION>/${VERSION}/g" README.txt > README.md
+
 # Remove any existing .deb files
 rm -f ./*.deb
 

@@ -77,5 +77,5 @@ Result of `run_commands` executed by the assistant:
 Search results:
 {results}
 ''','tool_call_id': tool_call.id
-            }, 'search_documentation')
+            }, chat_id)
     mewtwo.respond_to_chat(chat_id)

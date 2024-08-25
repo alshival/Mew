@@ -11,11 +11,6 @@ if [ -d "/usr/share/mewtwo/RAG" ]; then
   rm -rf /usr/share/mewtwo/RAG
 fi
 
-# Remove the database file if it exists
-if [ -f "/usr/share/mewtwo/mew.db" ]; then
-  rm -f /usr/share/mewtwo/mew.db
-fi
-
 # Remove the main directory if it exists and is empty
 if [ -d "/usr/share/mewtwo" ]; then
   rmdir --ignore-fail-on-non-empty /usr/share/mewtwo

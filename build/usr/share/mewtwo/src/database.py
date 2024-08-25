@@ -281,20 +281,7 @@ def get_text_color():
     return None
 
 def get_documentation_path():
-    initialize_user_db()
     initialize_team_db()
-    # Check the user's database first
-    user_db = db_user()
-    cursor = user_db.cursor()
-    cursor.execute("SELECT documentation_path FROM config")
-    user_documentation_path = cursor.fetchone()
-    user_db.close()
-
-    # If the user's database has the text color, return it
-    if user_documentation_path and user_documentation_path[0]:
-        return user_documentation_path[0]
-
-    # If not, check the team database
     team_db = db_team()
     cursor = team_db.cursor()
     cursor.execute("SELECT documentation_path FROM config")

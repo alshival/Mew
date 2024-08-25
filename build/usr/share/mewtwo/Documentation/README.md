@@ -1,3 +1,4 @@
+
 # Mewtwo - AI Assistant for Server Administrators
 
 Mewtwo is a lightweight AI assistant designed to help server administrators manage their systems efficiently. It leverages OpenAI's API to provide intelligent responses and actionable insights based on server-specific documentation.
@@ -23,6 +24,19 @@ Mewtwo is a lightweight AI assistant designed to help server administrators mana
 
 Mewtwo is an AI assistant tailored for server administrators. It reads and interprets documentation stored on your server to provide detailed responses and instructions based on the specific setup. Whether you're setting up a PostgreSQL database, configuring an NGINX server, or managing cron jobs, Mewtwo can assist you by accessing and understanding the documentation you've provided.
 
+<table style="width: 100%; border-collapse: collapse;">
+  <tr>
+    <td style="width: 50%; text-align: center;">
+      <figcaption><b>Fefe can interact with files on your Ubuntu System</b></figcaption>
+      <img src="https://github.com/alshival/fefe-terminal/blob/main/media/Screenshot%20from%202024-08-16%2012-32-00.png" style="width: 100%;">
+    </td>
+    <td style="width: 50%; text-align: center;">
+      <figcaption><b>Fefe can generate images too!</b></figcaption>
+      <img src="https://github.com/alshival/fefe-terminal/blob/main/media/Screenshot%20from%202024-08-16%2012-33-37.png" style="width: 100%;">
+    </td>
+  </tr>
+</table>
+
 ## Features
 
 - **Documentation-Aware**: Mewtwo can access and understand server-specific documentation to answer questions accurately.
@@ -39,33 +53,58 @@ Mewtwo is an AI assistant tailored for server administrators. It reads and inter
 
 ### Installation Steps
 
-1. Download the `.deb` package.
+1. Download the `.deb` package via Github or using wget:
+   ```bash
+   wget https://github.com/alshival/Mewtwo/raw/main/mewtwo-1.1.1-all.deb
+   ```
+
 2. Install the package using:
    ```bash
-   sudo dpkg -i mewtwo-1.0-all.deb
+   sudo dpkg -i mewtwo-1.1.1-all.deb
    ```
-3. Configure your OpenAI API credentials:
+3. Configure your OpenAI API credentials. For personal credentials (stored in `~/.mewtwo.db`), run 
    ```bash
-   mewtwo-setup
+   mewtwo-setup 
    ```
+   If you would like to set up credentials for the team instead (stored in `/usr/share/mewtwo/mewtwo.db`), use:
+   ```bash
+   mewtwo-setup --team
+   ```
+   Team credentials are used by all users who have not defined personal credentials.
+
+4. Point Mewtwo to your documentation folder.
+   By default, Mewtwo's algorithm searches through documentation located in `/usr/share/mewtwo/Documentation`. But documentation within this directory may not persist when updating `Mewtwo`. Therefore, it is best to keep your server documentation in another directory that your team has permission to read from, such as `/Documentation/`. You can set the directory Mewtwo's search algorithm uses by running
+   ```bash
+   mewtwo-setup doc-directory
+   ```
+   After you have set the directory, run `mewtwo-setup rag` to update the search algorithm. Note that you should run `mewtwo-setup rag` after updating any documentation contained within the folder. We may include a service that monitors for changes within the documentation directory sometime in the future.
 
 ## Usage
 
 Once installed, you can start using Mewtwo by running:
 
-```bash
-mewtwo "How do I set up a new PostgreSQL user?"
+```
+mewtwo How do I set up a new PostgreSQL user?
+```
+Mewtwo will read the relevant documentation and provide step-by-step instructions. Note that some characters require escape. Terminals require single quotes be closed, so an apostrophe must be escaped: `\'`. The pipe operator,`\|` is another example. As is `\<`, and a few others. You can avoid worrying about escape characters by wrapping your prompt around double quotes.
+
+```
+mewtwo I\'m so happy \<3
+mewtwo "I'm so happy <3"
 ```
 
-Mewtwo will read the relevant documentation and provide step-by-step instructions or run the necessary commands.
+If you run into errors, try wiping Mewtwo's memory: `mewtwo-setup wipe-memory`.
+
+Mewtwo can run commands for you as well. You can ask it **which files are older than one week but not older than two weeks** and it will run  
+   ```bash
+   find . -maxdepth 1 -type f -mtime +7 -mtime -14
+   ``` 
+
+Mewtwo can also run sudo commands like `sudo apt update & sudo apt upgrade`. You can provide your sudo password during setup to grant Mewtwo the ability to bypass the sudo password request. sudo passwords are always stored in your personal database `~/.mewtwo.db` since they are user-specific.
 
 ## Documentation Overview
 
 By default, Mewtwo's algorithm searches through documentation stored in the `/usr/share/mewtwo/Documentation/` directory. You can change this using `mewtwo-setup doc-directory`. When updating documentation, it is important to run `mewtwo-setup rag` to update the search algorithm. You could use github to track your documentation and point mew to it, for example. Sample documentation is provided in the default directory. You can delete the files or change the documentation directory and they will be removed from the vector database used for retrieval-augmented generation.
-
-- **postgres.md**: Contains detailed information about a PostgreSQL instance, including setup instructions, configuration details, and user management. You can be as detailed as you wish.
-
-- **alshidata.md**: Documents the setup of `alshidata`, a `Rust API` hosted by Alshival's Data Service, explaining how different components are integrated.
 
 ## Setup Script
 

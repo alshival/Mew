@@ -19,7 +19,7 @@ def print_help():
     print("  --user              Use user database for setup (default)")
     print("\nCommands:")
     print("  doc-directory       Set the documentation directory. mewtwo will search through the documents within that folder. Default path is `/usr/share/mewtwo/Documentation`")
-    print("  openai-api          Set the OpenAI API key and organization ID")
+    print("  openai-api          Set the OpenAI API key and organization ID. Leave API key blank to remove any existing key.")
     print("  rag                 Updates mewtwo's vector database for searching through documentation. Run after adding/updating documentation.")
     print("  sudo                Update the `sudo` password used by mewtwo. Should be defined at the user level: `mewtwo-setup --user sudo`")
     print("  text-color          Set the text color")
@@ -29,8 +29,7 @@ def print_help():
 def update_openai_api(conn):
     openai_api_key = getpass.getpass("Please enter your OpenAI API key: ").strip()
     if not openai_api_key:
-        print("API key cannot be empty. No changes were made.")
-        return
+        openai_api_key = None
     org_id = input("Please enter your Organization ID (Optional): ").strip()
     if not org_id:
         org_id = None  # Allow empty organization ID
@@ -64,8 +63,7 @@ def choose_text_color(conn):
 def setup(conn):
     update_openai_api(conn)
     choose_text_color(conn)
-    update_sudo_password(conn)
-    conn.close()
+    
 
 def doc_path(conn):
     answer = input("Enter the path to the directory containing your server's documentation: ").strip()
@@ -96,6 +94,18 @@ def ensure_sudo():
         os.execvp('sudo', ['sudo', '-E', sys.executable] + sys.argv)
         sys.exit(1)
 
+def ensure_not_sudo():
+    """Ensure the script is not running with sudo."""
+    if os.geteuid() == 0:
+        user = os.getenv("SUDO_USER")  # Get the non-root user who ran sudo
+        if user:
+            print("Script is running with elevated privileges. Re-running without sudo...")
+            os.execvp('sudo', ['sudo', '-u', user, sys.executable] + sys.argv)
+            sys.exit(1)
+        else:
+            print("Error: Cannot determine the original user. Exiting.")
+            sys.exit(1)
+
 def update_sudo_password(conn):
     sudo_password = getpass.getpass("Please enter your sudo password (Optional): ").strip()
     if not sudo_password:
@@ -110,7 +120,6 @@ def update_rag():
     monitorDocs.update()
 
 if __name__ == "__main__":
-    db_type = 'user'  # Default to user
     conn = None       # Initialize conn to None
     command = None    # No command by default
 
@@ -124,10 +133,24 @@ if __name__ == "__main__":
             database.initialize_team_db()
             conn = database.db_team()
         elif arg == '--user':
+            ensure_not_sudo()
             database.initialize_user_db()
             conn = database.db_user()
-        elif arg in ['text-color', 'openai-api', 'wipe-memory', 'rag', 'doc-directory','sudo']:
+        # General commands
+        elif arg in ['text-color', 'openai-api']:
             command = arg
+        # User specific commands
+        elif arg in ['sudo','wipe-memory']:
+            command = arg
+            ensure_not_sudo()
+            database.initialize_user_db()
+            conn = database.db_user()
+        # Requires Elevated Privileges
+        elif arg in ['rag','doc-directory']:
+            ensure_sudo()
+            command = arg 
+            database.initialize_team_db()
+            conn = database.db_team()
         else:
             print(f"Unknown option or command: {arg}")
             print_help()
@@ -135,28 +158,33 @@ if __name__ == "__main__":
 
     # Default to user database if no --team or --user is provided
     if conn is None:
+        ensure_not_sudo()
         database.initialize_user_db()
         conn = database.db_user()
 
-    # Execute command or setup
+    # General
     if command == 'text-color':
         choose_text_color(conn)
         conn.close()
     elif command == 'openai-api':
         update_openai_api(conn)
         conn.close()
+    # User-specific
+    elif command == 'sudo':
+        update_sudo_password(conn)
+        conn.close()
     elif command == 'wipe-memory':
         wipe_memory(conn)
         conn.close()
+    # Team database.
     elif command == 'rag':
-        ensure_sudo()
+        # rag doesn't actually require a database connection
+        conn.close()
         update_rag()
     elif command == 'doc-directory':
         doc_path(conn)
         conn.close()
-    elif command == 'sudo':
-        update_sudo_password(conn)
-        conn.close()
     else:
         setup(conn)
-        print("\nRun `mewtwo-setup rag` to update the documentation search algorithm.")
+        print("\nUse `mewtwo-setup doc-directory` to point Mewtwo to your documentation.")
+        print("Then run `mewtwo-setup rag` to update the search algorithm.\n")

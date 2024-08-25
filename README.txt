@@ -55,12 +55,12 @@ Mewtwo is an AI assistant tailored for server administrators. It reads and inter
 
 1. Download the `.deb` package via Github or using wget:
    ```bash
-   wget https://github.com/alshival/Mewtwo/raw/main/mewtwo-1.1.1-all.deb
+   wget https://github.com/alshival/Mewtwo/raw/main/mewtwo-<VERSION>-all.deb
    ```
 
 2. Install the package using:
    ```bash
-   sudo dpkg -i mewtwo-1.1.1-all.deb
+   sudo dpkg -i mewtwo-<VERSION>-all.deb
    ```
 3. Configure your OpenAI API credentials. For personal credentials (stored in `~/.mewtwo.db`), run 
    ```bash
